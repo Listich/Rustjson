@@ -49,6 +49,24 @@ impl Lexer {
                                 println!("Erreur : attendu 'null'");
                             }
                         }
+                        't' => {
+                            let suite : String = self.text.chars().skip(self.pos + 1).take(3).collect();
+                            if suite == "rue" {
+                                self.tokens.push(Token::Bool(true));
+                                self.pos += 3;
+                            } else {
+                                println!("Erreur : attendu 'true'");
+                            }
+                        }
+                        'f' => {
+                            let suite : String = self.text.chars().skip(self.pos + 1).take(4).collect();
+                            if suite == "alse"  {
+                                self.tokens.push(Token::Bool(false));
+                                self.pos += 4;
+                            } else {
+                                println!("Erreur : attendu 'false'");
+                            }
+                        }
                         _ => {},
                     }
                 },

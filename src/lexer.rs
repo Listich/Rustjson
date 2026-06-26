@@ -40,6 +40,15 @@ impl Lexer {
                         '}' => self.tokens.push(Token::RBrace),
                         ',' => self.tokens.push(Token::Comma),
                         ':' => self.tokens.push(Token::Colon),
+                        'n' => {
+                            let suite: String = self.text.chars().skip(self.pos + 1).take(3).collect();
+                            if suite == "ull" {
+                                self.tokens.push(Token::Null);
+                                self.pos += 3;
+                            } else {
+                                println!("Erreur : attendu 'null'");
+                            }
+                        }
                         _ => {},
                     }
                 },

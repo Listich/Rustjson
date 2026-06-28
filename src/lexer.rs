@@ -67,6 +67,11 @@ impl Lexer {
                                 println!("Erreur : attendu 'false'");
                             }
                         }
+                        '"' => {
+                            let  string : String = self.text.chars().skip(self.pos + 1).take_while(|&c| c != '"').collect();
+                            self.pos += string.chars().count(); 
+                            self.tokens.push(Token::StringToken(string));
+                        }
                         _ => {},
                     }
                 },

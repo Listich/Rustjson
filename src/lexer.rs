@@ -72,6 +72,11 @@ impl Lexer {
                             self.pos += string.chars().count(); 
                             self.tokens.push(Token::StringToken(string));
                         }
+                        '0'.. = '9' | '-' => {
+                            let number : String = self.text.chars().skip(self.pos).take_while(|&c| c.is_ascii_digit() || c == '.' || c == 'e' || c == 'E' || c == '+' || c == '-').collect();
+                            self.pos += number.chars().count();
+                            self.tokens.push(Token::Number(number.parse().unwrap()));
+                        }
                         _ => {},
                     }
                 },

@@ -1,3 +1,4 @@
+#[derive(Debug)]
 pub enum Token {
     LBrace,
     RBrace,
@@ -11,10 +12,11 @@ pub enum Token {
     Null,
 }
 
+#[derive(Debug)]
 pub struct Lexer {
     text : String,
     pos : usize,
-    tokens : Vec<Token>,
+    pub tokens : Vec<Token>,
 }
 
 impl Lexer {
@@ -28,12 +30,13 @@ impl Lexer {
     pub fn tokenize(&mut self) {
         let len = self.text.chars().count();
 
+        
         while self.pos < len {
             let character = self.text.chars().nth(self.pos);
             match character {
                 Some(c) => {
                     match c {
-                        c if c.is_whitespace() => continue,
+                        c if c.is_whitespace() => {},
                         '[' => self.tokens.push(Token::LBracket),
                         ']' => self.tokens.push(Token::RBracket),
                         '{' => self.tokens.push(Token::LBrace),
@@ -69,19 +72,24 @@ impl Lexer {
                         }
                         '"' => {
                             let  string : String = self.text.chars().skip(self.pos + 1).take_while(|&c| c != '"').collect();
-                            self.pos += string.chars().count(); 
+                            self.pos += string.chars().count() + 1; 
                             self.tokens.push(Token::StringToken(string));
                         }
-                        '0'.. = '9' | '-' => {
+                        '0'..='9' | '-' => {
                             let number : String = self.text.chars().skip(self.pos).take_while(|&c| c.is_ascii_digit() || c == '.' || c == 'e' || c == 'E' || c == '+' || c == '-').collect();
-                            self.pos += number.chars().count();
-                            self.tokens.push(Token::Number(number.parse().unwrap()));
+                            self.pos += number.chars().count() - 1;
+
+                            if let Ok(parsed_num) = number.parse::<f64>() {
+                                self.tokens.push(Token::Number(parsed_num));
+                            } else {
+                                println!("Erreur : format de nombre invalide '{}'", number);
+                            }
                         }
                         _ => {},
                     }
                 },
                 None => break,
-            },
+            };
             self.pos += 1;
         }
     }

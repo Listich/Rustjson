@@ -1,7 +1,8 @@
 mod lexer;
 use lexer::Lexer;
+
 fn main() {
-    let texte_json = String::from(r#"{"age": 25, "is_valid": true, "data": null}"#);
+    let texte_json = String::from(r#"{"a": {"b": 1}}"#);
     let mut lexer = Lexer::new(texte_json);
     println!("Avant tokenize");
     lexer.tokenize();

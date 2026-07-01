@@ -10,3 +10,17 @@ pub enum JsonValue {
     Object(HashMap<String, JsonValue>),
 }
 
+#[derive(Debug)]
+pub struct Parser {
+    tokens: Vec<Token>,
+    index : usize,
+}
+
+impl Parser {
+    pub fn new(tokens: Vec<Token>) -> Self {
+        Parser {
+            tokens,
+            index : 0,
+        }
+    }
+}
